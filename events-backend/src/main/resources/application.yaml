@@ -1,0 +1,42 @@
+server:
+  port: 8081
+  address: 0.0.0.0
+
+spring:
+  main:
+    prefer-ipv4-stack: true
+  application:
+    name: events-backend
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/eventos_backend?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: root         # así con comillas vacías si usás sudo mysql y root sin contraseña
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+
+externalAuth:
+  base-url: http://192.168.194.250:8080
+  login-path: /api/authenticate
+  username: ${EXTERNAL_AUTH_USER:sc.fernandez}
+  password: ${EXTERNAL_AUTH_PASS:1234}
+  buffer-seconds: 30
+
+application:
+  security:
+    jwt:
+      secret-key: MjUzNjQ1Nzg3NTg4NDYyNTY0NTc4MzY0NTc4MzY0NTc4MzY0NTc4MzY0NTc4MzY0NTc4MzY0NQ==
+      expiration: 86400000 # 24 hours
+    auth:
+      secret: ${AUTH_SECRET:mi-secret-super-seguro-2025}
+
+proxy:
+  base-url: http://localhost:8082

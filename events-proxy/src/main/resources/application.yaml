@@ -1,0 +1,44 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: events-proxy
+
+  data:
+    redis:
+      host: 192.168.194.250
+      port: 6379
+      database: 0
+
+  kafka:
+    bootstrap-servers: 192.168.194.250:9092
+    consumer:
+      group-id: events-backend-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    properties:
+      metadata.max.age.ms: 60000
+      client.dns.lookup: use_all_dns_ips
+
+backend:
+  base-url: http://localhost:8081
+  sync-endpoint: /internal/events/sync
+
+# Configuración de seguridad JWT
+# IMPORTANTE: Debe usar el MISMO secret-key que el backend para validar tokens
+application:
+  security:
+    jwt:
+      secret-key: MjUzNjQ1Nzg3NTg4NDYyNTY0NTc4MzY0NTc4MzY0NTc4MzY0NTc4MzY0NTc4MzY0NTc4MzY0NQ==
+
+logging:
+  file:
+    name: logs/kafka-notifications.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    ar.edu.um.events_proxy.service.EventKafkaConsumerService: INFO

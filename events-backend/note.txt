@@ -1,0 +1,27 @@
+1- Detalle importante, la dirección de los servidores:
+Kafka: 192.168.194.250:9092
+Redis: 192.168.194.250:6379
+Servidor web: 192.168.194.250:8080
+
+2- Redis de la catedra:
+Que se guarda en redis?
+Se almacena un objeto json con información de los asientos bloqueados o vendidos de un evento (identificado por el ID de la cátedra)
+Refrescando la memoria respecto del proceso de venta
+a- Se listan todos los eventos para identificarlos
+b- Se selecciona un evento en particular y se muestran todos los datos. Se da la posibilidad de vender entradas
+c- En el proceso de venta de entradas se muestra de alguna forma un mapa con los asientos disponibles. Tener en cuenta que el evento puede ser grande. En este punto voy a revisar los datos para que no sean tantos y se puede manejar de forma aceptable desde la aplicacion movil.
+En ese instante se consulta el servicio redis de la cátedra para obtener el listado de asientos vendidos/ocupados para saber que se puede ofrecer o no al cliente final
+d- Se bloquean los asientos (el bloqueo expira a los 5 minutos)
+e- Durante el bloqueo se cargan los datos del cliente y medio de pago. La parte del pago no se tiene en cuenta en la cátedra, es simplemente para simular el proceso del lado del cliente.
+f- Se realiza la venta
+
+En redis, se almacena SOLAMENTE los asientos vendidos o bloqueados, el resto se debe considerar como asiento disponible.
+
+3- En el documento se define el endpoint de login de usuario de una forma similar a esta: http://SERVIDOR:PUERTO/api/authenticate pero en la sección de payload está mal escrito, figura otra dirección, la dirección correcta es la que estoy escribiendo acá.
+
+preguntas
+El redis de la catedra tiene que guardarse en un redis mio?
+Que tipo de notificaciones manda kafka y como deberiamos actualizar la db?
+Deberia haber autorizacion si no hay login o solo usar token para endpoints de la catedra?
+Deberia normalizar la base de datos o guardar la informacion tal cual?
+Usar el mismo endpoint local para eventos individuales?
